@@ -1,10 +1,4 @@
 spring:
-#  datasource:
-#    url: jdbc:h2:tcp://localhost/~/mini_greeting;MODE=MYSQL
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
-
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -16,8 +10,10 @@ spring:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 100
-logging:
-  level:
-    # Logger에 sql문이 찍힌다.
-    org.hibernate.SQL: debug
-    p6spy: info
+
+api:
+  kakao:
+    key: ${KAKAO_KEY}
+  naver:
+    id: ${NAVER_ID}
+    secret: ${NAVER_SECRET}
