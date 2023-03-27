@@ -34,7 +34,7 @@ class CourseService {
         val courseResponseDto = CourseResponseDto(
             t_start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             t_end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
-            placeResponseDto)
+            placeResponseDto, "제주도에서 해변을 보며 즐겨보세요.")
         return listOf(courseResponseDto)
     }
 
@@ -58,6 +58,6 @@ class CourseService {
         return CourseResponseDto(
             t_start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             t_end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
-            activity)
+            activity, "제주도에서 해변을 보며 즐겨보세요.")
     }
 }
