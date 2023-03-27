@@ -1,0 +1,19 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+
+api:
+  kakao:
+    key: ${KAKAO_KEY}
+  naver:
+    id: ${NAVER_ID}
+    secret: ${NAVER_SECRET}
