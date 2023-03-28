@@ -18,7 +18,7 @@ enum class ErrorType(val errorCode: String, val message: String) {
 
     PLACE_NOT_EXISTS("PLACE-001", "존재하지 않는 장소입니다."),
     KAKAO_PLACE_NOT_FOUND("KAKAO-001", "카카오 플레이스 API에서 문제가 발생했습니다."),
-
+    NAVER_TRANSLATE_ERROR("NAVER-001", "네이버 번역 API에서 문제가 발생했습니다."),
     GPT_SERVER_ERROR("GPT-001", "chatGPT가 점검중입니다."),
 
     UNEXPECTED_SERVER_ERROR("SERVER-001", "서버 관리자에게 문의하세요.");
