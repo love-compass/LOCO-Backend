@@ -11,6 +11,8 @@ data class CourseResponseDto (
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val end_time: String,
     val activity: PlaceResponseDto,
-    val response: String
+    val response: String,
+    val budget: Long,
+    val description: String
 ){
 }
