@@ -1,5 +1,6 @@
 package com.loco.course.service
 
+import com.loco.course.ui.dto.CoursesResponseDto
 import com.loco.course.ui.dto.FullCourseRequestDto
 import com.loco.course.ui.dto.CourseResponseDto
 import com.loco.course.ui.dto.OneCourseRequestDto
@@ -19,13 +20,13 @@ import java.time.format.DateTimeFormatter
 @RequiredArgsConstructor
 @Slf4j
 class CourseService {
-    fun createFullCourse(fullCourseRequestDto: FullCourseRequestDto): List<CourseResponseDto> {
+    fun createFullCourse(fullCourseRequestDto: FullCourseRequestDto): CoursesResponseDto {
         checkPlace(fullCourseRequestDto.place)
         val placeResponseDto = PlaceResponseDto(
-            "제주특별자치도 제주시 용담삼동 2572-4", "CE7", "카페",
-            "음식점 > 카페 > 커피전문점 > 스타벅스", "", "https://place.map.kakao.com/1897430820",
-            "1522-3232", "스타벅스 제주용담DT점", "http://place.map.kakao.com/26102947",
-            "제주특별자치도 제주시 서해안로 380", "126.484480056159", "33.5124867330564", ""
+            "서울 종로구 세종로 1-58",  "문화유적",
+            "여행 > 관광,명소 > 문화유적 > 문",  "02-2332-2222",
+            "광화문", "http://place.map.kakao.com/8234642", "서울 종로구 사직로 161",
+            "126.976861018866", "37.5759689663327", "http://imgnews.naver.net/image/5291/2022/12/04/0001681710_001_20221204105204154.jpg"
         )
         val t_start: LocalDateTime = LocalDateTime.now()
 
@@ -34,8 +35,8 @@ class CourseService {
         val courseResponseDto = CourseResponseDto(
             t_start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             t_end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
-            placeResponseDto, "제주도에서 해변을 보며 즐겨보세요.")
-        return listOf(courseResponseDto)
+            placeResponseDto, "멋진 광화문을 구경해요.", 10000, "광화문은 조선의 유적지이다.")
+        return CoursesResponseDto(fullCourseRequestDto.place, listOf(courseResponseDto), 10000)
     }
 
     fun checkPlace(place: String){
@@ -47,10 +48,10 @@ class CourseService {
 
     fun createOneCourse(oneCourseRequestDto: OneCourseRequestDto): CourseResponseDto {
         val activity = PlaceResponseDto(
-            "제주특별자치도 제주시 용담삼동 2572-4", "CE7", "카페",
-            "음식점 > 카페 > 커피전문점 > 스타벅스", "", "https://place.map.kakao.com/1897430820",
-            "1522-3232", "스타벅스 제주용담DT점", "http://place.map.kakao.com/26102947",
-            "제주특별자치도 제주시 서해안로 380", "126.484480056159", "33.5124867330564", ""
+            "서울 종로구 세종로 1-58",  "문화유적",
+            "여행 > 관광,명소 > 문화유적 > 문",  "02-2332-2222",
+            "광화문", "http://place.map.kakao.com/8234642", "서울 종로구 사직로 161",
+            "126.976861018866", "37.5759689663327", "http://imgnews.naver.net/image/5291/2022/12/04/0001681710_001_20221204105204154.jpg"
         )
         val t_start: LocalDateTime = LocalDateTime.of(2021, 9, 27, 17, 37, 39)
         val t_end: LocalDateTime = LocalDateTime.of(2021, 9, 27, 19, 32, 39)
@@ -58,6 +59,6 @@ class CourseService {
         return CourseResponseDto(
             t_start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             t_end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
-            activity, "제주도에서 해변을 보며 즐겨보세요.")
+            activity, "제주도에서 해변을 보며 즐겨보세요.", 10000, "광화문은 조선의 유적지이다.")
     }
 }
