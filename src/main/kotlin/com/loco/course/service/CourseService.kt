@@ -61,4 +61,20 @@ class CourseService {
             t_end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             activity, "제주도에서 해변을 보며 즐겨보세요.", 10000, "광화문은 조선의 유적지이다.")
     }
+
+    /**
+     * category_group_name 채우는 함수
+     */
+    fun fillCategoryGroupName(activity: PlaceResponseDto): PlaceResponseDto{
+        if(activity.category_group_name.length == 0){
+            val split = activity.category_name.split("")
+            if(split.size == 4){
+                activity.category_group_name = split[2]
+            }
+            else{
+                activity.category_group_name = split[1]
+            }
+        }
+        return activity
+    }
 }
