@@ -23,7 +23,7 @@ class TranslateService {
 
     val translateUrl: String = "https://openapi.naver.com/v1/papago/n2mt"
 
-    fun englishToKorean(eng:String): TranslateMessageResponseDto {
+    fun englishToKorean(eng:String): String {
 
         val text = URLEncoder.encode(eng, "UTF-8");
 
@@ -41,10 +41,10 @@ class TranslateService {
         if(translateResult == null || translateResult.message == null)
             throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.NAVER_TRANSLATE_ERROR.errorCode, ErrorType.NAVER_TRANSLATE_ERROR.message))
 
-        return translateResult.message
+        return translateResult.message.result.translatedText
     }
 
-    fun koreanToEnglish(kor:String): TranslateMessageResponseDto{
+    fun koreanToEnglish(kor:String): String{
 
         val text = URLEncoder.encode(kor, "UTF-8");
 
@@ -62,7 +62,7 @@ class TranslateService {
 
         if(translateResult == null || translateResult.message == null)
             throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.NAVER_TRANSLATE_ERROR.errorCode, ErrorType.NAVER_TRANSLATE_ERROR.message))
-        return translateResult.message
+        return translateResult.message.result.translatedText
     }
 }
 
