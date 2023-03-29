@@ -9,7 +9,7 @@ data class FullCourseRequestDto (
     val start_time: LocalDateTime,
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val end_time: LocalDateTime,
-    val budget: String,
+    val budget: Long,
     val place: String
 ){
 }
