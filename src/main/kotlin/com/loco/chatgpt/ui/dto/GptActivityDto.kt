@@ -1,4 +1,13 @@
 package com.loco.chatgpt.ui.dto
 
-class GptActivityDto {
+import java.time.LocalDateTime
+
+data class GptActivityDto (
+    var activity_name: String,
+    val start_time: String,
+    val end_time: String,
+    var response: String,
+    var description: String,
+    val budget: Long
+){
 }

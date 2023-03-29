@@ -1,4 +1,7 @@
 package com.loco.chatgpt.ui.dto
 
-class GptResponseDto {
+data class GptResponseDto(
+    var result: List<GptActivityDto>
+) {
+
 }
