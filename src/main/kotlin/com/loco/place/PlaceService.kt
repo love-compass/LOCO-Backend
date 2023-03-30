@@ -36,7 +36,8 @@ class PlaceService {
             .bodyToMono(KakaoResponseDto::class.java)
             .block();
 
-        if (kakaoResult == null) {
+        if (kakaoResult == null || kakaoResult.documents.isEmpty()) {
+            println(place_name)
             throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.KAKAO_PLACE_NOT_FOUND.errorCode, ErrorType.KAKAO_PLACE_NOT_FOUND.message))
         }
         var result = kakaoResult.documents.get(0)
