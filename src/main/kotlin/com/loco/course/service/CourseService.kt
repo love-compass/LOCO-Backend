@@ -32,7 +32,7 @@ class CourseService(val chatGptService: ChatGptService, val placeService: PlaceS
         for (course in fullCourse.result){
             courseResult.add(CourseResponseDto(course.start_time, course.end_time,
                 fillCategoryGroupName(placeService.findPlace(course.activity_name)),
-                course.response, course.budget, course.description
+                course.budget, course.description
             ))
             total_budget += course.budget
         }
@@ -48,7 +48,7 @@ class CourseService(val chatGptService: ChatGptService, val placeService: PlaceS
 
         return CourseResponseDto(
             changedCourse.start_time, changedCourse.end_time,
-            activity, changedCourse.response, changedCourse.budget, changedCourse.description)
+            activity, changedCourse.budget, changedCourse.description)
     }
 
     fun checkPlace(place: String){
