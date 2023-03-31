@@ -10,16 +10,13 @@ import com.loco.course.ui.dto.OneCourseRequestDto
 import com.loco.exception.ErrorType
 import com.loco.exception.ExceptionResponse
 import com.loco.exception.LocoException
-import com.loco.place.ui.dto.KakaoResponseDto
-import com.loco.translate.TranslateService
-import com.loco.translate.ui.dto.TranslateRequestDto
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.BodyInserters
 import java.time.format.DateTimeFormatter
 
 @Service
-class ChatGptService(val translateService: TranslateService) {
+class ChatGptService() {
     fun getFullCourse(fullCourseRequestDto: FullCourseRequestDto): GptResponseDto {
         val url = "http://3.39.3.82:5000/course/full"
         val client3 = WebClientConfig()
@@ -73,31 +70,4 @@ class ChatGptService(val translateService: TranslateService) {
         return result
     }
 
-    fun translateKoreanToEnglish(tokenLists:List<String>):List<String>{
-        var trans:String = ""
-        val delim = "^"
-        for(s in tokenLists){
-            trans = trans + delim + s
-        }
-
-        val result = translateService.koreanToEnglish(trans).split(delim)
-        if(result.size != tokenLists.size){
-            throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.NAVER_TRANSLATE_ERROR.errorCode, ErrorType.NAVER_TRANSLATE_ERROR.message))
-        }
-        return result
-    }
-
-    fun translateEnglishToKorean(tokenLists:List<String>):List<String>{
-        var trans:String = ""
-        val delim = "^"
-        for(s in tokenLists){
-            trans = trans + delim + s
-        }
-
-        val result = translateService.englishToKorean(trans).split(delim)
-        if(result.size != tokenLists.size){
-            throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.NAVER_TRANSLATE_ERROR.errorCode, ErrorType.NAVER_TRANSLATE_ERROR.message))
-        }
-        return result
-    }
 }
