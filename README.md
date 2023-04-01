@@ -1,5 +1,5 @@
 # LOCO-Backend
-> ChatGPT기반 데이트 코스 서비스입니다.
+> ChatGPT기반 데이트 코스 추천 서비스입니다.
 ---
 ## API Document
 http://locoai.site/swagger-ui/index.html
