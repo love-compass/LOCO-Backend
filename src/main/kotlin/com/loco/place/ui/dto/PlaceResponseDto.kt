@@ -2,11 +2,8 @@ package com.loco.place.ui.dto
 
 data class PlaceResponseDto(
     val address_name: String,
-    val category_group_code: String,
-    val category_group_name: String,
-    val category_name: String,
-   val distance: String,
-    val id:String,
+    var category_group_name: String,
+    var category_name: String,
     val phone: String,
     val place_name: String,
     val place_url: String,
