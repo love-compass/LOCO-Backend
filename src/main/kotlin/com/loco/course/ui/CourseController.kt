@@ -2,6 +2,7 @@ package com.loco.course.ui
 
 import com.loco.course.service.CourseService
 import com.loco.course.ui.dto.CourseResponseDto
+import com.loco.course.ui.dto.CoursesResponseDto
 import com.loco.course.ui.dto.FullCourseRequestDto
 import com.loco.course.ui.dto.OneCourseRequestDto
 
@@ -31,7 +32,7 @@ class CourseController(val courseService: CourseService) {
         ApiResponse(responseCode = "404", description = "...", content = [Content()])]
     )
     @PostMapping("/course")
-    fun createCourse(@RequestBody fullCourseRequestDto: FullCourseRequestDto): ResponseEntity<List<CourseResponseDto>>{
+    fun createCourse(@RequestBody fullCourseRequestDto: FullCourseRequestDto): ResponseEntity<CoursesResponseDto>{
         val result = courseService.createFullCourse(fullCourseRequestDto)
         return ResponseEntity.status(HttpStatus.OK).body(result)
     }
