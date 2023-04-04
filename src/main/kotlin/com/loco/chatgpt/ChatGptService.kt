@@ -22,7 +22,7 @@ class ChatGptService() {
         val client3 = WebClientConfig()
 
         val req = GptFullCourseRequestDto(
-            fullCourseRequestDto.question,
+            fullCourseRequestDto.user_request,
             fullCourseRequestDto.start_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             fullCourseRequestDto.start_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             fullCourseRequestDto.budget,
@@ -53,7 +53,8 @@ class ChatGptService() {
             oneCourseRequestDto.place,
             oneCourseRequestDto.start_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             oneCourseRequestDto.end_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
-            oneCourseRequestDto.question)
+            oneCourseRequestDto.user_request,
+            oneCourseRequestDto.prior_places)
 
         var result = client3.webClient()
             .post()

@@ -5,6 +5,7 @@ data class GptCourseChangeRequestDto(
     val place:String,
     val start_time: String,
     val end_time: String,
-    val question: String
+    val user_request: String,
+    val prior_places: List<String>
 ) {
 }

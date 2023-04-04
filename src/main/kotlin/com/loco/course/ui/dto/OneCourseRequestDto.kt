@@ -11,6 +11,9 @@ data class OneCourseRequestDto (
     val start_time: LocalDateTime,
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     val end_time: LocalDateTime,
-    val question: String
+
+    val user_request: String,
+
+    val prior_places: List<String>
 ){
 }
