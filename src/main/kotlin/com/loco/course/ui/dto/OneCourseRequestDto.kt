@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 data class OneCourseRequestDto (
     val prior_activity_name: String,
 
-    @ApiModelProperty(example = "강남/역삼/선릉")
+    @ApiModelProperty(example = "종로/광화문")
     val place:String,
 
     @ApiModelProperty(example = "2023-01-01T18:00:00")
