@@ -23,8 +23,17 @@ class PlaceService {
     @Value("\${api.naver.secret}")
     val naverSecret: String = "1"
 
-    fun findPlace(place_name: String): PlaceResponseDto{
-        val kakakoUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query=" + place_name
+    fun findPlace(activity_name: String, place: String): PlaceResponseDto{
+        val arr = place.split("/")
+
+        var kakakoUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query="
+
+        if (activity_name.contains(arr[0])){
+            kakakoUrl += activity_name
+        }else{
+            kakakoUrl = kakakoUrl + arr[0] + " " + activity_name
+        }
+
 
         val client3 = WebClientConfig()
 
@@ -36,8 +45,8 @@ class PlaceService {
             .bodyToMono(KakaoResponseDto::class.java)
             .block();
 
+        
         if (kakaoResult == null || kakaoResult.documents.isEmpty()) {
-            println(place_name)
             throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.KAKAO_PLACE_NOT_FOUND.errorCode, ErrorType.KAKAO_PLACE_NOT_FOUND.message))
         }
         var result = kakaoResult.documents.get(0)
@@ -46,9 +55,9 @@ class PlaceService {
 
     }
 
-    fun findImage(place_name: String):String?{
+    fun findImage(activity_name: String):String?{
 
-        val naverurl = "https://openapi.naver.com/v1/search/image?query=" + place_name
+        val naverurl = "https://openapi.naver.com/v1/search/image?query=" + activity_name
         val client3 = WebClientConfig()
 
         val result = client3.webClient()
