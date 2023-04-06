@@ -6,5 +6,6 @@ data class GptFullCourseRequestDto(
     val end_time: String,
     val budget: Long,
     val place: String,
+    val prior_places: List<String>
     ) {
 }
