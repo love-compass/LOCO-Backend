@@ -15,7 +15,7 @@ data class FullCourseRequestDto (
     val end_time: LocalDateTime,
 
     val budget: Long,
-    @ApiModelProperty(example = "강남/역삼/선릉")
+    @ApiModelProperty(example = "종로/광화문")
     val place: String
 ){
 }
