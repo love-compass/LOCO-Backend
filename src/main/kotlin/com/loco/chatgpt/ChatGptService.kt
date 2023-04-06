@@ -26,7 +26,9 @@ class ChatGptService() {
             fullCourseRequestDto.start_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             fullCourseRequestDto.start_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             fullCourseRequestDto.budget,
-            fullCourseRequestDto.place)
+            fullCourseRequestDto.place,
+            listOf()
+        )
 
 
         val result = client3.webClient()
@@ -54,21 +56,22 @@ class ChatGptService() {
             oneCourseRequestDto.start_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             oneCourseRequestDto.end_time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
             oneCourseRequestDto.user_request,
-            oneCourseRequestDto.prior_places)
+            oneCourseRequestDto.prior_places,
+            10000)
 
         var result = client3.webClient()
             .post()
             .uri(url)
             .body(BodyInserters.fromValue(req))
             .retrieve()
-            .bodyToMono(GptActivityDto::class.java)
+            .bodyToMono(GptResponseDto::class.java)
             .block();
 
-        if (result == null){
+        if (result == null || result.result == null){
             throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.GPT_SERVER_ERROR.errorCode, ErrorType.GPT_SERVER_ERROR.message))
         }
 
-        return result
+        return result.result[0]
     }
 
 }
