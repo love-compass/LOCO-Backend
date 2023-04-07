@@ -23,7 +23,7 @@ class PlaceService {
     @Value("\${api.naver.secret}")
     val naverSecret: String = "1"
 
-    fun findPlace(activity_name: String, place: String): PlaceResponseDto{
+    fun findPlace(activity_name: String, place: String): PlaceResponseDto?{
         val arr = place.split("/")
 
         var kakakoUrl = "https://dapi.kakao.com/v2/local/search/keyword.json?query="
@@ -45,14 +45,13 @@ class PlaceService {
             .bodyToMono(KakaoResponseDto::class.java)
             .block();
 
-        
+
         if (kakaoResult == null || kakaoResult.documents.isEmpty()) {
-            throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.KAKAO_PLACE_NOT_FOUND.errorCode, ErrorType.KAKAO_PLACE_NOT_FOUND.message))
+            return null
         }
         var result = kakaoResult.documents.get(0)
         result.image_url = findImage(result.place_name)
         return result
-
     }
 
     fun findImage(activity_name: String):String?{
