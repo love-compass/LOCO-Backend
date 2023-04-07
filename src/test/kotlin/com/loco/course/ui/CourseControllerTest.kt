@@ -58,7 +58,8 @@ class CourseControllerTest {
     @Test
     fun `updateOneCourse should return CourseResponseDto`() {
         val oneCourseRequestDto = OneCourseRequestDto("Sample Course", "Sample Description",
-            LocalDateTime.now(), LocalDateTime.now().plusHours(2), "Sample Question")
+            LocalDateTime.now(), LocalDateTime.now().plusHours(2), "Sample Question", mutableListOf("Sample Place")
+        )
 
         Mockito.`when`(courseService.createOneCourse(oneCourseRequestDto)).thenReturn(courseResponseDto)
 
