@@ -21,6 +21,6 @@ data class OneCourseRequestDto (
 
     val user_request: String,
 
-    val prior_places: List<String>
+    var prior_places: MutableList<String>
 ){
 }
