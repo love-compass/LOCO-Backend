@@ -1,6 +1,7 @@
 package com.loco.course.service
 
 import com.loco.chatgpt.ChatGptService
+import com.loco.chatgpt.ui.dto.GptActivityDto
 import com.loco.course.ui.dto.CoursesResponseDto
 import com.loco.course.ui.dto.FullCourseRequestDto
 import com.loco.course.ui.dto.CourseResponseDto
@@ -32,23 +33,8 @@ class CourseService(val chatGptService: ChatGptService, val placeService: PlaceS
 
         for (course in fullCourse.result){
             var place = placeService.findPlace(course.activity_name, fullCourseRequestDto.place)
-            var prior_list: MutableList<String> = mutableListOf()
+            place = placeResponseDto(place, course, fullCourseRequestDto)
 
-            var cnt = 0
-            while(place == null){
-                cnt += 1
-                prior_list.add(course.activity_name)
-
-                val placeCourseRequestDto = OneCourseRequestDto("", fullCourseRequestDto.place,
-                    toLocalDateTime(course.start_time), toLocalDateTime(course.end_time), "", prior_list)
-
-                val changedCourse = chatGptService.getOneCourse(placeCourseRequestDto)
-                place = placeService.findPlace(changedCourse.activity_name, placeCourseRequestDto.place)
-
-                if(cnt > 5){
-                    throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.KAKAO_PLACE_NOT_FOUND.errorCode, ErrorType.KAKAO_PLACE_NOT_FOUND.message))
-                }
-            }
             courseResult.add(CourseResponseDto(course.start_time, course.end_time,
                 fillCategoryGroupName(place),
                 course.budget, course.description
@@ -61,30 +47,91 @@ class CourseService(val chatGptService: ChatGptService, val placeService: PlaceS
         return CoursesResponseDto(fullCourseRequestDto.place, courseResult, total_budget)
     }
 
+    private fun placeResponseDto(
+        place: PlaceResponseDto?,
+        course: GptActivityDto,
+        fullCourseRequestDto: FullCourseRequestDto
+    ): PlaceResponseDto {
+        var place1 = place
+        var prior_list: MutableList<String> = mutableListOf()
+        var cnt = 0
+        while (place1 == null) {
+            cnt += 1
+            prior_list.add(course.activity_name)
+
+            val placeCourseRequestDto = OneCourseRequestDto(
+                "", fullCourseRequestDto.place,
+                toLocalDateTime(course.start_time), toLocalDateTime(course.end_time), "", prior_list
+            )
+
+            val changedCourse = chatGptService.getOneCourse(placeCourseRequestDto)
+            place1 = placeService.findPlace(changedCourse.activity_name, placeCourseRequestDto.place)
+
+            if (cnt > 5) {
+                throw LocoException(
+                    HttpStatus.BAD_REQUEST,
+                    ExceptionResponse(
+                        ErrorType.KAKAO_PLACE_NOT_FOUND.errorCode,
+                        ErrorType.KAKAO_PLACE_NOT_FOUND.message
+                    )
+                )
+            }
+        }
+        return place1
+    }
+
 
     fun createOneCourse(oneCourseRequestDto: OneCourseRequestDto): CourseResponseDto {
         checkPlace(oneCourseRequestDto.place)
 
         var changedCourse = chatGptService.getOneCourse(oneCourseRequestDto)
         var activity = placeService.findPlace(changedCourse.activity_name, oneCourseRequestDto.place)
-        var cnt = 0
-        while(activity == null){
-            cnt += 1
-            var prior_list = oneCourseRequestDto.prior_places
-            prior_list.add(changedCourse.activity_name)
 
-            val placeCourseRequestDto = OneCourseRequestDto(oneCourseRequestDto.prior_activity_name, oneCourseRequestDto.place,
-                oneCourseRequestDto.start_time, oneCourseRequestDto.end_time, oneCourseRequestDto.user_request, prior_list)
+        val pair = checkKakaoAPI(activity, oneCourseRequestDto, changedCourse)
+        activity = pair.first
+        changedCourse = pair.second
 
-            changedCourse = chatGptService.getOneCourse(placeCourseRequestDto)
-            activity = placeService.findPlace(changedCourse.activity_name, placeCourseRequestDto.place)
-            if(cnt > 5){
-                throw LocoException(HttpStatus.BAD_REQUEST, ExceptionResponse(ErrorType.KAKAO_PLACE_NOT_FOUND.errorCode, ErrorType.KAKAO_PLACE_NOT_FOUND.message))
-            }
-        }
+
         return CourseResponseDto(
             changedCourse.start_time, changedCourse.end_time,
             activity, changedCourse.budget, changedCourse.description)
+    }
+
+    private fun checkKakaoAPI(
+        activity: PlaceResponseDto?,
+        oneCourseRequestDto: OneCourseRequestDto,
+        changedCourse: GptActivityDto
+    ): Pair<PlaceResponseDto, GptActivityDto> {
+        var activity1 = activity
+        var changedCourse1 = changedCourse
+        var cnt = 0
+        while (activity1 == null) {
+            cnt += 1
+            var prior_list = oneCourseRequestDto.prior_places
+            prior_list.add(changedCourse1.activity_name)
+
+            val placeCourseRequestDto = OneCourseRequestDto(
+                oneCourseRequestDto.prior_activity_name,
+                oneCourseRequestDto.place,
+                oneCourseRequestDto.start_time,
+                oneCourseRequestDto.end_time,
+                oneCourseRequestDto.user_request,
+                prior_list
+            )
+
+            changedCourse1 = chatGptService.getOneCourse(placeCourseRequestDto)
+            activity1 = placeService.findPlace(changedCourse1.activity_name, placeCourseRequestDto.place)
+            if (cnt > 5) {
+                throw LocoException(
+                    HttpStatus.BAD_REQUEST,
+                    ExceptionResponse(
+                        ErrorType.KAKAO_PLACE_NOT_FOUND.errorCode,
+                        ErrorType.KAKAO_PLACE_NOT_FOUND.message
+                    )
+                )
+            }
+        }
+        return Pair(activity1, changedCourse1)
     }
 
     fun checkPlace(place: String){
